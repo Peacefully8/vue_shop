@@ -73,8 +73,7 @@ export default {
       this.$refs.loginFormRef.validate(async valid => {
         if(!valid) return;  
         const {data:res} = await this.$http.post("login",this.loginForm)   
-        console.log(res);
-           
+        // console.log(res);         
         if(res.meta.status !== 200) return this.$message.error("登陆失败")
         this.$message.success("登陆成功")
         //1.登陆成功之后要保存服务器返回的token在本地的sessionStroge中
@@ -83,8 +82,6 @@ export default {
         //2.然后导航式跳转主页到/home
         window.sessionStorage.setItem("token",res.data.token);
         this.$router.push("/home")
-        
-        
       })
     }
   }
