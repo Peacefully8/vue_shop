@@ -99,6 +99,7 @@
                 type="warning"
                 size="mini"
                 icon="el-icon-s-tools"
+                @click="assignRoleDialog(scope.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -212,6 +213,39 @@
         >确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 分配角色 -->
+    <el-dialog
+      title="分配角色"
+      :visible.sync="showRoleDialog"
+      width="50%"
+    >
+      <div>当前用户：{{currentUser}}</div>
+      <div>当前角色：{{currentRole}}</div>
+      <div>分配新角色: <el-select
+          v-model="selectedRoleId"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in roleList"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="showRoleDialog = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="putAssignRole"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -284,6 +318,12 @@ export default {
           { validator: checkEmail, trigger: 'blur' }
         ]
       },
+      showRoleDialog: false,
+      currentUser: '',
+      currentRole: '',
+      roleId: '',
+      roleList: [],
+      selectedRoleId: ''
     }
 
   },
@@ -364,8 +404,8 @@ export default {
         type: 'warning',
       }).then(async () => {
         // console.log(id);
-        const { data:res } = await this.$http.delete(`users/${id}`)
-        if(res.meta.status!==200) return;
+        const { data: res } = await this.$http.delete(`users/${id}`)
+        if (res.meta.status !== 200) return;
         this.getUserList();
         this.$message({
           type: 'success',
@@ -377,19 +417,32 @@ export default {
           message: '已取消删除'
         });
       });
+    },
+    async assignRoleDialog(role) {
+      this.currentUser = role.username;
+      this.currentRole = role.role_name;
+      this.roleId = role.id;
+      // console.log(role);
+      
+
+      const {data:res} = await this.$http.get("roles");
+      // console.log(res);
+      if(res.meta.status!==200) return;
+      this.roleList = res.data;
+      this.showRoleDialog = true;
+    },
+    async putAssignRole(){
+      const {data:res} = await this.$http.put(`users/${this.roleId}/role`,{
+        rid:this.selectedRoleId
+      });
+      if(res.meta.status!==200) return this.$message.error(res.meta.mg_state);
+      this.$message.success(res.meta.msg);
+      this.getUserList();
+      this.showRoleDialog = false;
     }
   }
 }
 </script>
 
 <style scoped>
-.box-card {
-  margin-top: 10px;
-}
-.el-table {
-  margin-top: 20px;
-}
-.el-pagination {
-  margin-top: 20px;
-}
 </style>
