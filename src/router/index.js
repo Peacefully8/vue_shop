@@ -9,6 +9,11 @@ const Welcome = () => import("../components/content/Welcome/Welcome.vue")
 const Users = () => import("../components/content/Users.vue")
 const Rights = () => import("../components/content/Rights.vue")
 const Roles = () => import("../components/content/Roles.vue")
+const Categories = () => import("../components/content/Categories.vue")
+const Goods = () => import("../components/content/Goods.vue")
+const Params = () => import("../components/content/Params.vue")
+const Orders = () => import("../components/content/Orders.vue")
+const Reports = () => import("../components/content/Reports.vue")
 
 const routes = [{
     path: "/",
@@ -38,6 +43,26 @@ const routes = [{
       {
         path:"/roles",
         component:Roles
+      },
+      {
+        path:"/categories",
+        component:Categories
+      },
+      {
+        path:"/goods",
+        component:Goods
+      },
+      {
+        path:"/params",
+        component:Params
+      },
+      {
+        path:"/orders",
+        component:Orders
+      },
+      {
+        path:"/reports",
+        component:Reports
       }
     ]
   }
