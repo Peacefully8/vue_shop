@@ -316,7 +316,6 @@ export default {
         }
       });
       if (res.meta.status !== 200) return this.$message.error("获取参数列表失败");
-      console.log(res);
       res.data.forEach((item) => {
         item.attr_vals = item.attr_vals.length ? item.attr_vals.split(' ') : [];
         item.inputVisible = false;
